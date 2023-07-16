@@ -16,9 +16,7 @@
             console.log(me);
             var sql = `insert ignore into Users values('${me.id}', '${me.fname}', '${me.lname}');`;
             await osql.connect(sql);
-
-            document.getElementById('firstname').innerHTML = me.fname;
-            document.getElementById('lastname').innerHTML = me.lname;
+            sessionStorage.setItem('userid', me.id);
         });
 
         function logout() {
