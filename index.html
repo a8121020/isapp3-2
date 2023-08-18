@@ -13,14 +13,24 @@
 
         $(document).ready(async function () {
             var me = await osql.getMe();
-            console.log(me);
-            var sql = `insert ignore into Users values('${me.id}', '${me.fname}', '${me.lname}');`;
-            await osql.connect(sql);
-            sessionStorage.setItem('userid', me.id);
+            console.log(me);//id,fname,lname,ip,studentidを取得
+            var sql = `insert ignore into Users values('${me.studentid}', '${me.fname}', '${me.lname}');`;
+            
+            //重複するレコードがなければid,fname,lnameを追加して新規登録
+            await osql.connect(sql);//
+            sessionStorage.setItem('userid', me.studentid);
+            sessionStorage.setItem('userfname',me.fname);
+            sessionStorage.setItem('userlname',me.lname);
+
+            document.getElementById("lastname").innerHTML = me.lname;
+            document.getElementById('firstname').innerHTML = me.fname;
         });
 
         function logout() {
+            var ans = window.confirm('ログアウトしますか？');
+            if (ans == true){
             osql.logout();
+            }
         }
     </script>
 
@@ -30,7 +40,8 @@
     <h1>isapp3</h1>
     <div style="text-align: right;">
         ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
-        <a href="javascript:logout()">logout</a>
+        <a href="index.html">top</a>
+        <button onclick="logout()">ログアウト</button>
     </div>
     <hr>
     <div>

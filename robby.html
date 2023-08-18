@@ -19,16 +19,14 @@
             document.getElementById('lastname').innerHTML = me.lname;
 
             await refreshRooms();
-            setInterval(refreshRooms, 2000);
+            //setInterval(refreshRooms, 2000);
 
-            var sql = `select * from Users`;
-            var objects = await osql.connect(sql);
         });
 
         async function createRoom() {
             var name = document.getElementById('roomname').value;
             var sql = `insert into Rooms (name) values('${name}');`;
-            var objects = await osql.connect(sql);
+            await osql.connect(sql);
 
             refreshRooms();
         }
@@ -65,7 +63,7 @@
     <div>
         <h2>create room</h2>
         <input id="roomname" type="text">
-        <button onclick="createRoom()">ゲームを作る</button>
+        <button onclick="createRoom()">部屋を作る</button>
     </div>
     <h2>rooms</h2>
     <div id="rooms"></div>
