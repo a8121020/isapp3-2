@@ -29,6 +29,7 @@
             await osql.connect(InsertUser);
 
             DisplayUsers();
+            setInterval(DisplayTopic, 2000)
         });
 
         async function DisplayUsers(){
@@ -49,20 +50,31 @@
 
         async function DecideTopic(){
             var TopicName = document.getElementById('TopicName').value;
-            var sqlTopic = `update Rooms set topic = '${TopicName}'  where name = '${roomId}'`;
-            osql.connect(sqlTopic);
+            var sql = `update Rooms set topic ='${TopicName}'  where id = '${roomId}'`;
+            osql.connect(sql);
 
-            // var Topic = `select topic from Rooms where name = "${roomId}"`;
-            // var objects = await osql.connect(Topic);
-            // console.log(objects);
-            // document.getElementById('DisplayTopic').innerHTML = Topic;
         }
+
+        async function DisplayTopic(){
+            var TopicSQL = `select topic from Rooms where id = "${roomId}"`;
+            var objects = await osql.connect(TopicSQL);
+            var topic = objects[0].topic;
+            document.getElementById('DisplayTopic').innerHTML = topic;
+        }
+
         async function LogOut(){
             var ans = window.confirm("退出しますか？");
-            if (ans == true){
-                var sql = `delete from Participate where id = "${userId}"`;
+            var sql = `select count(*) from Participate`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var count = 'count(*)';
+            if(ans==true && objects[0].count ==1){
+                var sql = `delete from Participate where id = "${userId}" update Rooms set topic = "null"`;
                 osql.connect(sql);
-                location.href="robby.html"
+                location.href="robby.html";
+            }else if (ans == true){
+                osql.connect(sql);
+                location.href="robby.html";
             }
         }
     </script>
