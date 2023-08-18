@@ -16,27 +16,72 @@
         var userId = sessionStorage.getItem('userid');//Userメールアドレス
 
         $(document).ready(async function () {
-            //ABCさんを表示させる
             me = await osql.getMe();
 
             document.getElementById('lastname').innerHTML = me.lname;
             document.getElementById('firstname').innerHTML = me.fname;
 
-            
+            var sql = `select name from Rooms where id ='${roomId}'`;
+            var RoomName = await osql.connect(sql);
+            document.getElementById('roomname').innerHTML = RoomName[0].name;
 
+            var InsertUser = `insert into Participate (userId,roomId) values('${userId}','${roomId}')`;
+            await osql.connect(InsertUser);
+
+            DisplayUsers();
         });
 
-
+        async function DisplayUsers(){
+            var sql = `select fname,lname from Participate inner join Users on Users.id = Participate.userId;`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            for(var i=0; i<objects.length; i++){
+                html = html + '<tr>';
+                var object = objects[i];
+                html = html + `<td>${object.fname}${object.lname}</td>`;
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('UserList').innerHTML = html;
+        }
+        async function LogOut(){
+            var ans = window.confirm("退出しますか？");
+            if (ans == true){
+                location.href="robby.html"
+            }
+        }
     </script>
 
 </head>
 
 <body>
-    <h1>talkroom <span id="roomname"></span></h1>
+    <h1 id="roomname"></h1>
     <div style="text-align: right;">
         ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
         <a href="index.html">top</a>
+        <button onclick="LogOut()">退出する</button>
     </div>
+
+    <hr>
+   <ol>
+    <li>「Start」ボタンを押し、ゲーム開始。</li>
+   </ol>
+
+   <ul>
+    <li>退出する時は、右上の「退出」ボタンを押してください。</li>
+   </ul>
+
+    <hr>
+    <input id = "TopicName" type="text">
+    <button onclick="DecideTopic()">お題を決定</button>
+    <h3>お題:<span id="DisplayTopic"></span></h3>
+    <hr>
+    <h3>現在参加している人：<span id="UserList"></span></h3>
+    <hr>
+   <h3>みんなの回答</h3>
+   <p id="DisplayTable"></p>
 </body>
 
 </html>
