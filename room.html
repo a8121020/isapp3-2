@@ -46,9 +46,22 @@
             html = html + '</table>';
             document.getElementById('UserList').innerHTML = html;
         }
+
+        async function DecideTopic(){
+            var TopicName = document.getElementById('TopicName').value;
+            var sqlTopic = `update Rooms set topic = '${TopicName}'  where name = '${roomId}'`;
+            osql.connect(sqlTopic);
+
+            // var Topic = `select topic from Rooms where name = "${roomId}"`;
+            // var objects = await osql.connect(Topic);
+            // console.log(objects);
+            // document.getElementById('DisplayTopic').innerHTML = Topic;
+        }
         async function LogOut(){
             var ans = window.confirm("退出しますか？");
             if (ans == true){
+                var sql = `delete from Participate where id = "${userId}"`;
+                osql.connect(sql);
                 location.href="robby.html"
             }
         }
