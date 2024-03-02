@@ -17,9 +17,12 @@
             me = await osql.getMe();
             document.getElementById('firstname').innerHTML = me.fname;
             document.getElementById('lastname').innerHTML = me.lname;
+            var StudentId = me.studentid;
 
             await refreshRooms();
             //setInterval(refreshRooms, 2000);
+            var sql = `delete from Participate where userId ="${StudentId}"`;
+            await osql.connect(sql);
 
         });
 
