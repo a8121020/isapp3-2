@@ -33,13 +33,15 @@
             setInterval(DisplayTopic, 2000)
         });
 
-        async function DisplayUsers(){
-            var sql = `select fname,lname from Participate inner join Users on Users.id = Participate.userId;`;
+        async function DisplayUsers() {
+            var sql = `select fname,lname from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
+            /*Usersテーブルに登録されているIdとParticipateテーブルに登録されているIdを照合して、一致したら、その人の下の名前
+            を表示する*/
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
             html = html + '<table border="1">';
-            for(var i=0; i<objects.length; i++){
+            for (var i = 0; i < objects.length; i++) {
                 html = html + '<tr>';
                 var object = objects[i];
                 html = html + `<td>${object.fname}${object.lname}</td>`;
@@ -49,36 +51,37 @@
             document.getElementById('UserList').innerHTML = html;
         }
 
-        async function DecideTopic(){
+        async function DecideTopic() {
             var TopicName = document.getElementById('TopicName').value;
             var sql = `update Rooms set topic ='${TopicName}'  where id = '${roomId}'`;
             osql.connect(sql);
 
         }
 
-        async function DisplayTopic(){
+        async function DisplayTopic() {
             var TopicSQL = `select topic from Rooms where id = "${roomId}"`;
             var objects = await osql.connect(TopicSQL);
             var topic = objects[0].topic;
             document.getElementById('DisplayTopic').innerHTML = topic;
         }
 
-        async function LogOut(){
+        async function LogOut() {
             var ans = window.confirm("退出しますか？");
             var sql = `select count(*) from Participate`;
             var objects = await osql.connect(sql);
             var count = 'count(*)';
             var objects2 = objects[0][count]
-            if(ans==true && objects2 ==1){
+            if (ans == true && objects2 == 1) {
                 var sql = `delete from Participate where userId = "${userId}"; 
                             update Rooms set topic = "null" where name = "${roomId}";`;
                 osql.connect(sql);
-                location.href="robby.html";
-            }else if (ans == true){
+                location.href = "robby.html";
+            } else if (ans == true) {
                 osql.connect(sql);
-                location.href="robby.html"
+                location.href = "robby.html"
             }
         }
+
     </script>
 
 </head>
@@ -92,23 +95,23 @@
     </div>
 
     <hr>
-   <ol>
-    <li>「Start」ボタンを押し、ゲーム開始。</li>
-   </ol>
+    <ol>
+        <li>「Start」ボタンを押し、ゲーム開始。</li>
+    </ol>
 
-   <ul>
-    <li>退出する時は、右上の「退出」ボタンを押してください。</li>
-   </ul>
+    <ul>
+        <li>退出する時は、右上の「退出」ボタンを押してください。</li>
+    </ul>
 
     <hr>
-    <input id = "TopicName" type="text">
+    <input id="TopicName" type="text">
     <button onclick="DecideTopic()">お題を決定</button>
     <h3>お題:<span id="DisplayTopic"></span></h3>
     <hr>
     <h3>現在参加している人：<span id="UserList"></span></h3>
     <hr>
-   <h3>みんなの回答</h3>
-   <p id="DisplayTable"></p>
+    <h3>みんなの回答</h3>
+    <p id="DisplayTable"></p>
 </body>
 
 </html>
