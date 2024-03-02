@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        $(document).ready(async function () {
+            var me = await osql.getMe();
+            console.log(me);//id,fname,lname,ip,studentidを取得
+            var sql = `insert ignore into Users values('${me.studentid}', '${me.fname}', '${me.lname}');`;
+
+            //重複するレコードがなければid,fname,lnameを追加して新規登録
+            await osql.connect(sql);//
+            sessionStorage.setItem('userid', me.studentid);
+            sessionStorage.setItem('userfname', me.fname);
+            sessionStorage.setItem('userlname', me.lname);
+
+            document.getElementById("lastname").innerHTML = me.lname;
+            document.getElementById('firstname').innerHTML = me.fname;
+        });
+
+        function logout() {
+            var ans = window.confirm('ログアウトしますか？');
+            if (ans == true) {
+                osql.logout();
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>isapp3</h1>
+    <div style="text-align: right;">
+        ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
+        <a href="index.html">top</a>
+        <button onclick="logout()">ログアウト</button>
+    </div>
+    <hr>
+    <div>
+        <h2>すでに開始されているので、入室できません。他の部屋をお探しください。</h2>
+        <a href="robby.html">robbyへ</a>
+    </div>
+</body>
+
+</html>

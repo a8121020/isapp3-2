@@ -31,6 +31,7 @@
 
             DisplayUsers();
             setInterval(DisplayTopic, 2000)
+            StartOrNo();
         });
 
         async function DisplayUsers() {
@@ -38,7 +39,6 @@
             /*Usersテーブルに登録されているIdとParticipateテーブルに登録されているIdを照合して、一致したら、その人の下の名前
             を表示する*/
             var objects = await osql.connect(sql);
-            console.log(objects);
             var html = '';
             html = html + '<table border="1">';
             for (var i = 0; i < objects.length; i++) {
@@ -89,8 +89,17 @@
         async function Start() {
             var button = document.getElementById('button');
             button.style.display = "none";
-            var sql = `update Rooms set status = '開始中' where id = ${roomId}`;
+            var sql = `update Rooms set status = '開始中' where id = "${roomId}"`;
             osql.connect(sql);
+        }
+
+        async function StartOrNo() {
+            var sql = `select status from Rooms where id = "${roomId}"`;
+            var StartOr = await osql.connect(sql);
+            var status = StartOr[0].status;
+            if (status == "開始中") {
+                location.href = "CantEnter.html";
+            }
         }
 
     </script>
