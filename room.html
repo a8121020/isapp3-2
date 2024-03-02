@@ -42,10 +42,13 @@
             var html = '';
             html = html + '<table border="1">';
             for (var i = 0; i < objects.length; i++) {
+                var Iplus = i + 1;
                 html = html + '<tr>';
                 var object = objects[i];
                 html = html + `<td>${object.fname}${object.lname}</td>`;
+                html = html + `<td>${Iplus}`;
                 html = html + '</tr>';
+                console.log(Iplus);
             }
             html = html + '</table>';
             document.getElementById('UserList').innerHTML = html;
