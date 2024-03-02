@@ -42,13 +42,13 @@
             var html = '';
             html = html + '<table border="1">';
             for (var i = 0; i < objects.length; i++) {
-                var Iplus = i + 1;
+                //var Iplus = i + 1;
                 html = html + '<tr>';
                 var object = objects[i];
                 html = html + `<td>${object.fname}${object.lname}</td>`;
-                html = html + `<td>${Iplus}`;
+                html = html + '<td></td>';
                 html = html + '</tr>';
-                console.log(Iplus);
+                //console.log(Iplus);
             }
             html = html + '</table>';
             document.getElementById('UserList').innerHTML = html;
@@ -57,6 +57,7 @@
         async function DecideTopic() {
             var TopicName = document.getElementById('TopicName').value;
             var sql = `update Rooms set topic ='${TopicName}'  where id = '${roomId}'`;
+            //update Rooms set status = 'まだ開始されていない' where id = ${roomId};
             osql.connect(sql);
 
         }
@@ -83,6 +84,13 @@
                 osql.connect(sql);
                 location.href = "robby.html"
             }
+        }
+
+        async function Start() {
+            var button = document.getElementById('button');
+            button.style.display = "none";
+            var sql = `update Rooms set status = '開始中' where id = ${roomId}`;
+            osql.connect(sql);
         }
 
     </script>
@@ -113,6 +121,8 @@
     <hr>
     <h3>現在参加している人：<span id="UserList"></span></h3>
     <hr>
+    <button onclick="Start()" id="button">スタート</button>
+    <p id="status"></p>
     <h3>みんなの回答</h3>
     <p id="DisplayTable"></p>
 </body>
