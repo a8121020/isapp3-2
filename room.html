@@ -30,9 +30,12 @@
             var CountSql = `select count(*) from Participate where roomId = ${roomId}`;
             var Usercount = await osql.connect(CountSql);
 
+            var InsertUser = `insert into Participate (userId,roomId) values('${userId}','${roomId}')`;
+            await osql.connect(InsertUser);
+
+            StartOrNo();
             DisplayUsers();
             setInterval(DisplayTopic, 2000)
-            StartOrNo();
         });
 
         async function DisplayUsers() {
@@ -40,6 +43,7 @@
             /*Usersテーブルに登録されているIdとParticipateテーブルに登録されているIdを照合して、一致したら、その人の下の名前
             を表示する*/
             var objects = await osql.connect(sql);
+            console.log(objects);
             var html = '';
             html = html + '<table border="1">';
             for (var i = 0; i < objects.length; i++) {
@@ -100,16 +104,13 @@
             var status = StartOr[0].status;
             var CountSql = `select count(*) from Participate where roomId = ${roomId}`;
             var Usercount = await osql.connect(CountSql);
-            console.log(Usercount);
+            //console.log(Usercount);
             var moji = "count(*)"
             var count = Usercount[0][moji];
-            console.log(count);
+            //console.log(count);
             //count = CountSql[0].moji;
-            if (status == "開始中" && count != '0') {
+            if (status == "開始中") {
                 location.href = "CantEnter.html";
-            } else {
-                var InsertUser = `insert into Participate (userId,roomId) values('${userId}','${roomId}')`;
-                await osql.connect(InsertUser);
             }
         }
 
