@@ -18,6 +18,7 @@
         var order;
         var userList = [];
         var randomList = [];
+        var dic = {};
 
         $(document).ready(async function () {
 
@@ -97,7 +98,6 @@
             var topicSql = `select topic from Rooms where id = ${roomId}`;
             var topicResult = await osql.connect(topicSql);
             var topic = topicResult[0].topic;
-            console.log(topic);
             if (topic != 'null') {
                 var button = document.getElementById('button');
                 button.style.display = "none";
@@ -106,22 +106,32 @@
                 osql.connect(sql);
                 var sql2 = `select fname,lname, userId from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
                 var who = await osql.connect(sql2);
-                console.log(who);
 
                 for (var i = 0; i < who.length; i++) {
-                    var object = who[i];
-                    userList.push(object.userId);
+                    userList.push(who[i].userId);
                 }
-                for (var i = 1; i <= who.length; i++) {
+
+                for (var i = 1; i <= userList.length; i++) {
                     randomList.push(i);
                 }
 
-                console.log(userList);
-                console.log(randomList);
-                console.log(Math.floor(Math.random() * (who.length) + 1))
-
-
-
+                for (var i = 1; i <= (userList.length * 10); i++) {
+                    for (var j = 0; j < userList.length; j++) {
+                        var RandomDayo = Math.floor(Math.random() * (userList.length) + 1);
+                        var Index = randomList.indexOf(RandomDayo);
+                        if (randomList.length == 0) {
+                            break;
+                        } else if (Index != -1) {
+                            randomList.splice(Index, 1);
+                            console.log(Index);
+                            var a = userList.shift();
+                            dic[a] = RandomDayo;
+                            var changeOder = `update Participate set InOrder = ${RandomDayo} where userId = ${a}`;
+                            var OrderChanged = osql.connect(changeOder);
+                        }
+                    }
+                }
+                console.log(dic);
             } else if (topic == 'null') {
                 document.getElementById('recent').innerHTML = "まだトピックが決まっていません！";
             }
