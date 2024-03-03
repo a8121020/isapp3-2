@@ -15,6 +15,8 @@
         var roomId = osql.getParam('roomId');
         sessionStorage.setItem('roomId', roomId);
         var userId = sessionStorage.getItem('userid');
+        var order;
+        var userList = [];
 
         $(document).ready(async function () {
 
@@ -50,10 +52,10 @@
                 html = html + '<tr>';
                 var object = objects[i];
                 html = html + `<td>${object.fname}${object.lname}</td>`;
-                html = html + '<td></td>';
                 html = html + '</tr>';
                 //console.log(Iplus);
             }
+            order = objects.length;
             html = html + '</table>';
             document.getElementById('UserList').innerHTML = html;
         }
@@ -93,8 +95,20 @@
         async function Start() {
             var button = document.getElementById('button');
             button.style.display = "none";
+            document.getElementById('recent').innerHTML = "スタートしました"
             var sql = `update Rooms set status = '開始中' where id = "${roomId}"`;
             osql.connect(sql);
+            var sql2 = `select fname,lname, userId from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
+            var who = await osql.connect(sql2);
+            console.log(who);
+
+            for (var i = 0; i < who.length; i++) {
+                var object = who[i];
+                userList.push(object.userId);
+            }
+            console.log(userList);
+            //console.log(Math.floor(Math.random() * order + 1))
+
         }
 
         async function StartOrNo() {
@@ -142,7 +156,8 @@
     <h3>現在参加している人：<span id="UserList"></span></h3>
     <hr>
     <button onclick="Start()" id="button">スタート</button>
-    <p id="status"></p>
+    <p>現状：<span id="recent"></span></p>
+    <p id="turn"></p>
     <h3>みんなの回答</h3>
     <p id="DisplayTable"></p>
 </body>

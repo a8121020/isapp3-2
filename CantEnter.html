@@ -15,21 +15,7 @@
             var roomId = sessionStorage.getItem('roomId');
             var userId = sessionStorage.getItem('userid');
             var me = await osql.getMe();
-            console.log(me);//id,fname,lname,ip,studentidを取得
-            var sql = `insert ignore into Users values('${me.studentid}', '${me.fname}', '${me.lname}');`;
 
-            //重複するレコードがなければid,fname,lnameを追加して新規登録
-            await osql.connect(sql);//
-            sessionStorage.setItem('userid', me.studentid);
-            sessionStorage.setItem('userfname', me.fname);
-            sessionStorage.setItem('userlname', me.lname);
-
-            document.getElementById("lastname").innerHTML = me.lname;
-            document.getElementById('firstname').innerHTML = me.fname;
-
-            var CountSql = `select count(*) from Participate where roomId = "${roomId}"`;
-            var Usercount = await osql.connect(CountSql);
-            console.log(Usercount);
         });
 
         function logout() {
