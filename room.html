@@ -17,6 +17,7 @@
         var userId = sessionStorage.getItem('userid');
         var order;
         var userList = [];
+        var randomList = [];
 
         $(document).ready(async function () {
 
@@ -93,22 +94,38 @@
         }
 
         async function Start() {
-            var button = document.getElementById('button');
-            button.style.display = "none";
-            document.getElementById('recent').innerHTML = "スタートしました"
-            var sql = `update Rooms set status = '開始中' where id = "${roomId}"`;
-            osql.connect(sql);
-            var sql2 = `select fname,lname, userId from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
-            var who = await osql.connect(sql2);
-            console.log(who);
+            var topicSql = `select topic from Rooms where id = ${roomId}`;
+            var topicResult = await osql.connect(topicSql);
+            var topic = topicResult[0].topic;
+            console.log(topic);
+            if (topic != 'null') {
+                var button = document.getElementById('button');
+                button.style.display = "none";
+                document.getElementById('recent').innerHTML = "スタートしました"
+                var sql = `update Rooms set status = '開始中' where id = "${roomId}"`;
+                osql.connect(sql);
+                var sql2 = `select fname,lname, userId from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
+                var who = await osql.connect(sql2);
+                console.log(who);
 
-            for (var i = 0; i < who.length; i++) {
-                var object = who[i];
-                userList.push(object.userId);
+                for (var i = 0; i < who.length; i++) {
+                    var object = who[i];
+                    userList.push(object.userId);
+                }
+                for (var i = 1; i <= who.length; i++) {
+                    randomList.push(i);
+                }
+
+                console.log(userList);
+                console.log(randomList);
+                console.log(Math.floor(Math.random() * (who.length) + 1))
+
+
+
+            } else if (topic == 'null') {
+                document.getElementById('recent').innerHTML = "まだトピックが決まっていません！";
             }
-            console.log(userList);
             //update 
-            //console.log(Math.floor(Math.random() * order + 1))
 
         }
 

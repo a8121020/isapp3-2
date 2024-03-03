@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        var me;
+        var roomId = osql.getParam('roomId');
+        sessionStorage.setItem('roomId', roomId);
+        var userId = sessionStorage.getItem('userid');
+        var order;
+        var userList = ['Aさん', 'Bさん', 'Cさん'];
+        var randomList = [];
+        var dic = {};
+
+        $(document).ready(async function () {
+
+            me = await osql.getMe();
+
+        });
+
+        async function LogOut() {
+            var ans = window.confirm("退出しますか？");
+            var sql = `select count(*) from Participate`;
+            var objects = await osql.connect(sql);
+            var count = 'count(*)';
+            var objects2 = objects[0][count]
+            if (ans == true && objects2 == 1) {
+                var sql = `delete from Participate where userId = "${userId}"; 
+                            update Rooms set topic = "null" where id = "${roomId}";`;
+                osql.connect(sql);
+                location.href = "robby.html";
+            } else if (ans == true) {
+                osql.connect(sql);
+                location.href = "robby.html"
+            }
+        }
+
+        async function Start() {
+
+            for (var i = 1; i <= userList.length; i++) {
+                randomList.push(i);
+            }
+            console.log(randomList);
+            console.log(userList);
+
+            for (var i = 1; i <= userList.length * 10; i++) {
+                for (var j = 0; j < userList.length; j++) {
+                    var RandomDayo = Math.floor(Math.random() * 3 + 1);
+                    console.log("出た数" + RandomDayo);
+                    var Index = randomList.indexOf(RandomDayo);
+                    // var userIndex = Index-1;
+                    //console.log("インデックス" + Index);
+                    if (randomList.length == 0) {
+                        break;
+                    }
+                    else if (Index != -1) {
+                        randomList.splice(Index, 1);
+                        console.log(Index);
+                        var a = userList.shift();
+                        dic[a] = RandomDayo;
+                        console.log("取った値" + a);
+                    }
+                    console.log(randomList);
+
+                }
+                console.log(dic);
+            }
+        }
+
+
+
+
+
+    </script>
+
+</head>
+
+<body>
+    <h1 id="roomname"></h1>
+    <div style="text-align: right;">
+        ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
+        <a href="index.html">top</a>
+        <button onclick="LogOut()">退出する</button>
+    </div>
+    <button onclick="Start()" id="button">スタート</button>
+</body>
+
+</html>
