@@ -44,14 +44,13 @@
         }
 
         async function Start() {
-
             for (var i = 1; i <= userList.length; i++) {
                 randomList.push(i);
             }
             console.log(randomList);
             console.log(userList);
 
-            for (var i = 1; i <= userList.length * 10; i++) {
+            for (var i = 1; i <= (userList.length * 10); i++) {
                 for (var j = 0; j < userList.length; j++) {
                     var RandomDayo = Math.floor(Math.random() * 3 + 1);
                     console.log("出た数" + RandomDayo);
@@ -60,8 +59,7 @@
                     //console.log("インデックス" + Index);
                     if (randomList.length == 0) {
                         break;
-                    }
-                    else if (Index != -1) {
+                    } else if (Index != -1) {
                         randomList.splice(Index, 1);
                         console.log(Index);
                         var a = userList.shift();
