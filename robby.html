@@ -54,7 +54,8 @@
                 var count = Usercount[0][moji];
                 if (object.status == '開始中' && count == '0') {
                     //console.log("roomId" + object.id + "は開始中ですが、countは0です。")
-                    var changeStatus = `update Rooms set status = '空き' where id = ${object.id}`;
+                    var changeStatus = `update Rooms set status = '空き' where id = ${object.id};
+                                        update Rooms set topic = "null" where id = ${object.id}`;
                     osql.connect(changeStatus);
                 }
             }

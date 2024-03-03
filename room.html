@@ -83,7 +83,7 @@
             var objects2 = objects[0][count]
             if (ans == true && objects2 == 1) {
                 var sql = `delete from Participate where userId = "${userId}"; 
-                            update Rooms set topic = "null" where name = "${roomId}";`;
+                            update Rooms set topic = "null" where id = "${roomId}";`;
                 osql.connect(sql);
                 location.href = "robby.html";
             } else if (ans == true) {
@@ -107,6 +107,7 @@
                 userList.push(object.userId);
             }
             console.log(userList);
+            //update 
             //console.log(Math.floor(Math.random() * order + 1))
 
         }
