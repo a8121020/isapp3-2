@@ -43,7 +43,7 @@
         });
 
         async function DisplayUsers() {
-            var sql = `select fname,lname from Participate inner join Users on Users.id = Participate.userId where roomId = "${roomId}";`;
+            var sql = `select fname,lname from Participate inner join Users on Users.id = Participate.userId where roomId = ${roomId};`;
             /*Usersテーブルに登録されているIdとParticipateテーブルに登録されているIdを照合して、一致したら、その人の下の名前
             を表示する*/
             var objects = await osql.connect(sql);
@@ -100,7 +100,7 @@
             var topic = topicResult[0].topic;
             if (topic != 'null') {
                 var button = document.getElementById('button');
-                button.style.display = "none";
+                //button.style.display = "none";
                 document.getElementById('recent').innerHTML = "スタートしました"
                 var sql = `update Rooms set status = '開始中' where id = "${roomId}"`;
                 osql.connect(sql);
@@ -110,6 +110,7 @@
                 for (var i = 0; i < who.length; i++) {
                     userList.push(who[i].userId);
                 }
+
 
                 for (var i = 1; i <= userList.length; i++) {
                     randomList.push(i);
@@ -123,19 +124,17 @@
                             break;
                         } else if (Index != -1) {
                             randomList.splice(Index, 1);
-                            console.log(Index);
                             var a = userList.shift();
                             dic[a] = RandomDayo;
                             var changeOder = `update Participate set InOrder = ${RandomDayo} where userId = ${a}`;
-                            var OrderChanged = osql.connect(changeOder);
+                            var OrderChanged = await osql.connect(changeOder);
                         }
                     }
                 }
-                console.log(dic);
             } else if (topic == 'null') {
                 document.getElementById('recent').innerHTML = "まだトピックが決まっていません！";
             }
-            //update 
+            Order();
 
         }
 
@@ -153,6 +152,22 @@
             if (status == "開始中") {
                 location.href = "CantEnter.html";
             }
+        }
+        async function Order() {
+            var Ordersql = `select fname,lname,userId,InOrder from Participate inner join Users on Users.id = Participate.userId`;
+            var OrderResult = await osql.connect(Ordersql);
+            var count = 0;
+            var orderdic = {};
+
+            for (var a in dic) {
+                count = count + 1;
+            }
+            for (var i = 1; i <= count; i++) {
+                for (var b in dic) {
+                    orderdic[b] = dic[b]
+                }
+            }
+            console.log(orderdic);
         }
 
     </script>
