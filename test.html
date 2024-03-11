@@ -13,31 +13,31 @@
 
         var dic = { "100番": 3, "B": 1, "Cさん": 2 };
         var orderdic = {};
+        var answerDic = { "Bさん": [] };
 
-        $(document).ready(async function () {
+        function MyAnswer() {
+            // var count = 0;
+            // for (var a in dic) {
+            //     count = count + 1;
+            // }
+            // for (var i = 0; i <= count; i++) {
+            //     for (var b in dic) {
+            //         //console.log("dic[b]" + dic[b]);
+            //         if (i == dic[b]) {
+            //             orderdic[b] = dic[b];
+            //         }
+            //     }
+            // }
+            // console.log(orderdic);
 
-            me = await osql.getMe();
+            // for (var c in orderdic) {
+            //     console.log(c);
+            // }
 
-        });
+            var text = document.getElementById('answerText').value;
+            answerDic["Bさん"].push(text);
+            console.log(answerDic);
 
-        function Start() {
-            var count = 0;
-            for (var a in dic) {
-                count = count + 1;
-            }
-            for (var i = 0; i <= count; i++) {
-                for (var b in dic) {
-                    //console.log("dic[b]" + dic[b]);
-                    if (i == dic[b]) {
-                        orderdic[b] = dic[b];
-                    }
-                }
-            }
-            console.log(orderdic);
-
-            for (var c in orderdic) {
-                console.log(c);
-            }
 
         }
 
@@ -73,13 +73,8 @@
 </head>
 
 <body>
-    <h1 id="roomname"></h1>
-    <div style="text-align: right;">
-        ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
-        <a href="index.html">top</a>
-        <button onclick="LogOut()">退出する</button>
-    </div>
-    <button onclick="Start()" id="button">スタート</button>
+    <input type="text" id="answerText">
+    <button onclick="MyAnswer()">回答する</button>
 </body>
 
 </html>

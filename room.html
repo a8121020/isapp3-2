@@ -19,8 +19,9 @@
         var userList = [];
         var randomList = [];
         var dic = {};
+        var orderdic = {};
         var count = 0;
-        var x = 0;
+        var x = 1;
 
         $(document).ready(async function () {
 
@@ -170,7 +171,6 @@
             var Ordersql = `select userId,fname, lname from (Participants inner join Answers on Answers.id = Participants.userId) inner join Users on Users.id = Participants.userId;`;
             var OrderResult = await osql.connect(Ordersql);
             count = 0;
-            var orderdic = {};
 
             for (var a in dic) {
                 count = count + 1;
@@ -180,10 +180,9 @@
                     orderdic[b] = dic[b]
                 }
             }
-            x = 1;
 
             for (var c in orderdic) {
-                if (orderdic[c] == 1) {
+                if (orderdic[c] == x) {
                     document.getElementById("answer").innerHTML = "あなたの番です。";
                     answerText.style.display = "block";
                     answerButton.style.display = "block";
@@ -195,12 +194,32 @@
                     answerButton.style.display = "none" //他の人が回答者だった場合は、回答ボタンを表示しない。
                 }
             }
+            x += 1;
         }
 
         async function Answer() {
+            if (x > count) {
+                x = 1;
+            }
+
+
             var Content = document.getElementById('answerText').value;
             var InputAnswerSql = `update Answers set Content = "${Content}" where id = ${me.studentid};`;
             osql.connect(InputAnswerSql);
+
+            for (var c in orderdic) {
+                if (orderdic[c] == x) {
+                    document.getElementById("answer").innerHTML = "あなたの番です。";
+                    answerText.style.display = "block";
+                    answerButton.style.display = "block";
+
+                } else {
+                    var answerSql = `select Users.id, fname, lname from Users inner join Participants on Users.id = Participants.userId where roomId = ${roomId} and InOrder = ${orderdic[c]};`;
+                    var objects = await osql.connect(answerSql);
+                    answerButton = document.getElementById('answerButton');
+                    answerButton.style.display = "none" //他の人が回答者だった場合は、回答ボタンを表示しない。
+                }
+            }
         }
 
     </script>
