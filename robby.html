@@ -23,7 +23,8 @@
             setInterval(refreshRooms, 500);
             var sql = `delete from Participants where userId ="${StudentId}"`;
             await osql.connect(sql);
-
+            var deleteAnswersSql = `delete from Answers where id = ${StudentId}`;
+            osql.connect(deleteAnswersSql);
         });
 
         async function createRoom() {
