@@ -19,6 +19,8 @@
         var userList = [];
         var randomList = [];
         var dic = {};
+        var count = 0;
+        var x = 0;
 
         $(document).ready(async function () {
 
@@ -40,6 +42,13 @@
             StartOrNo();
             DisplayUsers();
             setInterval(DisplayTopic, 2000)
+
+            var answerText = document.getElementById("answerText");
+            answerText.style.display = "none";
+
+            var answerButton = document.getElementById('answerButton');
+            answerButton.style.display = "none";
+
         });
 
         async function DisplayUsers() {
@@ -135,7 +144,8 @@
                 document.getElementById('recent').innerHTML = "まだトピックが決まっていません！";
             }
             Order();
-
+            var startButton = document.getElementById('button');
+            startButton.style.display = "none";
         }
 
         async function StartOrNo() {
@@ -156,7 +166,7 @@
         async function Order() {
             var Ordersql = `select fname,lname,userId,InOrder from Participate inner join Users on Users.id = Participate.userId`;
             var OrderResult = await osql.connect(Ordersql);
-            var count = 0;
+            count = 0;
             var orderdic = {};
 
             for (var a in dic) {
@@ -167,7 +177,25 @@
                     orderdic[b] = dic[b]
                 }
             }
-            console.log(orderdic);
+            x = 1;
+
+            for (var c in orderdic) {
+                if (orderdic[c] == 1) {
+                    document.getElementById("answer").innerHTML = "あなたの番です。";
+                    answerText.style.display = "block";
+                    answerButton.style.display = "block";
+
+                } else {
+                    var answerSql = `select Users.id, fname, lname from Users inner join Participate on Users.id = Participate.userId where roomId = ${roomId} and InOrder = ${orderdic[c]};`;
+                    var objects = await osql.connect(answerSql);
+                    answerButton = document.getElementById('answerButton');
+                    answerButton.style.display = "none" //他の人が回答者だった場合は、回答ボタンを表示しない。
+                }
+            }
+        }
+
+        async function Answer() {
+            var answerUser = `select fname, lname from Users `;
         }
 
     </script>
@@ -203,6 +231,9 @@
     <p id="turn"></p>
     <h3>みんなの回答</h3>
     <p id="DisplayTable"></p>
+    <p id="answer"></p>
+    <input type="text" id="answerText">
+    <button onclick="answer()" id="answerButton">回答する。</button>
 </body>
 
 </html>

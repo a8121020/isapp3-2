@@ -11,7 +11,7 @@
     <script>
         osql.requireLogin();
 
-        var dic = { "Aさん": 3, "Bさん": 1, "Cさん": 2 };
+        var dic = { "100番": 3, "B": 1, "Cさん": 2 };
         var orderdic = {};
 
         $(document).ready(async function () {
@@ -34,6 +34,10 @@
                 }
             }
             console.log(orderdic);
+
+            for (var c in orderdic) {
+                console.log(c);
+            }
 
         }
 
