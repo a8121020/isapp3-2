@@ -21,7 +21,7 @@
 
             await refreshRooms();
             setInterval(refreshRooms, 500);
-            var sql = `delete from Participate where userId ="${StudentId}"`;
+            var sql = `delete from Participants where userId ="${StudentId}"`;
             await osql.connect(sql);
 
         });
@@ -48,7 +48,7 @@
                 html = html + `<td>${object.name}</td>`;
                 html = html + `<td><a href="room.html?roomId=${object.id}">入室</a></td>`;
                 html = html + '</tr>';
-                var CountSql = `select count(*) from Participate where roomId = ${j}`;
+                var CountSql = `select count(*) from Participants where roomId = ${j}`;
                 var Usercount = await osql.connect(CountSql);
                 var moji = "count(*)"
                 var count = Usercount[0][moji];
