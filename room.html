@@ -198,8 +198,9 @@
         }
 
         async function Answer() {
-            var answerWord = document.getElementById('answerText').value;
-            var InputAnswer = `update `;
+            var Content = document.getElementById('answerText').value;
+            var InputAnswerSql = `update Answers set Content = "${Content}" where id = ${me.studentid};`;
+            osql.connect(InputAnswerSql);
         }
 
     </script>
@@ -237,7 +238,7 @@
     <p id="DisplayTable"></p>
     <p id="answer"></p>
     <input type="text" id="answerText">
-    <button onclick="answer()" id="answerButton">回答する。</button>
+    <button onclick="Answer()" id="answerButton">回答する。</button>
 </body>
 
 </html>
