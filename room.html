@@ -79,14 +79,6 @@
             document.getElementById('UserList').innerHTML = html;
         }
 
-        async function DecideTopic() {
-            var TopicName = document.getElementById('TopicName').value;
-            var sql = `update Rooms set topic ='${TopicName}'  where id = '${roomId}'`;
-            //update Rooms set status = 'まだ開始されていない' where id = ${roomId};
-            osql.connect(sql);
-
-        }
-
         async function DisplayTopic() {
             var TopicSQL = `select topic from Rooms where id = "${roomId}"`;
             var objects = await osql.connect(TopicSQL);

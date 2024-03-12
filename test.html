@@ -10,10 +10,7 @@
 
     <script>
         osql.requireLogin();
-
-        var dic = { "100番": 3, "B": 1, "Cさん": 2 };
-        var orderdic = {};
-        var answerDic = { "B": ["虎", "猫"] };
+        var answerDic = { "B": ["虎", "猫"], "A": ["猫"] };
 
         function MyAnswer() {
             // var count = 0;
@@ -35,23 +32,21 @@
             // }
 
             // var text = document.getElementById('answerText').value;
-            // answerDic["B"].push(text);
+            // answerDic["B"].push(text);;
             var html = "";
             html = html + "<table border='1'>";
             html = html + "<ul>";
-            for (var i = 0; i <= answerDic.length; i++) {
-                for (var a in answerDic) {
-                    console.log(answerDic[a][i]);
-                    html = html + "<li>" + a + "さんが" + answerDic[a][i] + "と回答しました！</li>";
-                }
+            var i = 0;
+            for (var a in answerDic) {
+                html = html + "<li>" + a + "さんが" + answerDic[a][i] + "と回答しました！</li>";
             }
-
             html = html + "</ul>"
             html = html + "</table>"
 
             document.getElementById('table').innerHTML = html;
-
         }
+
+
 
 
         // for (var i = 1; i <= (userList.length * 10); i++) {
