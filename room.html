@@ -22,6 +22,7 @@
         var orderdic = {};
         var count = 0;
         var x = 1;
+        var Turns = 0;
 
         $(document).ready(async function () {
 
@@ -195,9 +196,12 @@
                 }
             }
             x += 1;
+            var turnSql = `update Rooms set turn = ${1} where id = ${roomId}`;
+            osql.connect(turnSql);
         }
 
         async function Answer() {
+            x = x + 1;
             if (x > count) {
                 x = 1;
             }
@@ -220,6 +224,9 @@
                     answerButton.style.display = "none" //他の人が回答者だった場合は、回答ボタンを表示しない。
                 }
             }
+            Turns = Turns + 1;
+            var turnSql = `update Rooms set turn = ${Turns} where id = ${roomId}`;
+            osql.connect(turnSql);
         }
 
     </script>

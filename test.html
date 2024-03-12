@@ -13,7 +13,7 @@
 
         var dic = { "100番": 3, "B": 1, "Cさん": 2 };
         var orderdic = {};
-        var answerDic = { "Bさん": [] };
+        var answerDic = { "B": ["虎", "猫"] };
 
         function MyAnswer() {
             // var count = 0;
@@ -34,10 +34,22 @@
             //     console.log(c);
             // }
 
-            var text = document.getElementById('answerText').value;
-            answerDic["Bさん"].push(text);
-            console.log(answerDic);
+            // var text = document.getElementById('answerText').value;
+            // answerDic["B"].push(text);
+            var html = "";
+            html = html + "<table border='1'>";
+            html = html + "<ul>";
+            for (var i = 0; i <= answerDic.length; i++) {
+                for (var a in answerDic) {
+                    console.log(answerDic[a][i]);
+                    html = html + "<li>" + a + "さんが" + answerDic[a][i] + "と回答しました！</li>";
+                }
+            }
 
+            html = html + "</ul>"
+            html = html + "</table>"
+
+            document.getElementById('table').innerHTML = html;
 
         }
 
@@ -75,6 +87,7 @@
 <body>
     <input type="text" id="answerText">
     <button onclick="MyAnswer()">回答する</button>
+    <p id="table"></p>
 </body>
 
 </html>
