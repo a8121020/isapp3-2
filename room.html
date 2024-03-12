@@ -13,9 +13,7 @@
 
         var me;
         var roomId = osql.getParam('roomId');
-        sessionStorage.setItem('roomId', roomId);
-        var userId = sessionStorage.getItem('userid');
-        var order;
+        var userId;
         var userList = [];
         var randomList = [];
         var dic = {};
@@ -27,6 +25,7 @@
         $(document).ready(async function () {
 
             me = await osql.getMe();
+            userId = me.studentid;
 
             document.getElementById('lastname').innerHTML = me.lname;
             document.getElementById('firstname').innerHTML = me.fname;
@@ -227,6 +226,15 @@
             Turns = Turns + 1;
             var turnSql = `update Rooms set turn = ${Turns} where id = ${roomId}`;
             osql.connect(turnSql);
+
+            var html = "";
+            html += "<table border='1'>";
+            html = html + "<ul>";
+            html = html + "<li>" + me.fname + me.lname + "さんが" + Content + "と回答しました！</li>";
+            html = html + "</ul>";
+            html = html + "</table>";
+            document.getElementById('DisplayTable').innerHTML = html;
+
         }
 
     </script>

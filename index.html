@@ -13,14 +13,10 @@
 
         $(document).ready(async function () {
             var me = await osql.getMe();
+            console.log(me);
             var sql = `insert ignore into Users values('${me.studentid}', '${me.fname}', '${me.lname}');`;
-
             //重複するレコードがなければid,fname,lnameを追加して新規登録
-            await osql.connect(sql);//
-            sessionStorage.setItem('userid', me.studentid);
-            sessionStorage.setItem('userfname', me.fname);
-            sessionStorage.setItem('userlname', me.lname);
-
+            await osql.connect(sql);
             document.getElementById("lastname").innerHTML = me.lname;
             document.getElementById('firstname').innerHTML = me.fname;
         });

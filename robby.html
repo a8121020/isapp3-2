@@ -28,6 +28,7 @@
         });
 
         async function createRoom() {
+            //新しい部屋を作成
             var name = document.getElementById('roomname').value;
             var sql = `insert into Rooms (name) values('${name}');`;
             await osql.connect(sql);
@@ -47,6 +48,12 @@
                 var object = objects[i];
                 html = html + `<td>${object.id}</td>`;
                 html = html + `<td>${object.name}</td>`;
+                html = html + `<td>${object.status}</td>`;
+                if (object.status == "空き") {
+                    html = html + ` <td>入室できます！</td>`;
+                } else if (object.status == "開始中") {
+                    html = html + `<td>開始中！他の部屋に入室してください！</td>`;
+                }
                 html = html + `<td><a href="room.html?roomId=${object.id}">入室</a></td>`;
                 html = html + '</tr>';
                 var CountSql = `select count(*) from Participants where roomId = ${j}`;
