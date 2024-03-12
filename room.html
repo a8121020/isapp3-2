@@ -7,6 +7,7 @@
 
     <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script type="text/javascript" src="lib/osql.js"></script>
+    <link rel="stylesheet" href="style.css">
 
     <script>
         osql.requireLogin();
@@ -16,6 +17,8 @@
         var userId;
         var userList = [];
         var randomList = [];
+        var TopicsList = ["動物", "食べ物", "山手線駅名", "歌手", "映画名", "キャラクター"];
+        var Topic;
         var dic = {};
         var orderdic = {};
         var count = 0;
@@ -30,9 +33,13 @@
             document.getElementById('lastname').innerHTML = me.lname;
             document.getElementById('firstname').innerHTML = me.fname;
 
-            var sql2 = `select name from Rooms where id ='${roomId}'`;
+            var sql2 = `select name from Rooms where id =${roomId}`;
             var RoomName = await osql.connect(sql2);
             document.getElementById('roomname').innerHTML = RoomName[0].name;
+
+            Topic = TopicsList[Math.floor(Math.random() * 7)];
+            var updateTopic = `update Rooms set topic = "${Topic}" where id = ${roomId}`;
+            osql.connect(updateTopic);
 
             var CountSql = `select count(*) from Participants where roomId = ${roomId}`;
             var Usercount = await osql.connect(CountSql);
@@ -259,8 +266,6 @@
     </ul>
 
     <hr>
-    <input id="TopicName" type="text">
-    <button onclick="DecideTopic()">お題を決定</button>
     <h3>お題:<span id="DisplayTopic"></span></h3>
     <hr>
     <h3>現在参加している人：<span id="UserList"></span></h3>
